@@ -19,4 +19,4 @@ services:
     environment:
       PHP_FPM_POOL_NAME: genie_task
 
-networks: { web: { driver: bridge } }
+networks: { web: { external: true } }
