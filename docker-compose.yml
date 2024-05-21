@@ -1,0 +1,21 @@
+services:
+    php:
+      build:
+        context: .
+        dockerfile: docker/dev/runtimes/php/Dockerfile
+        target: development
+        args:
+          USER_ID: $USER_ID
+          GROUP_ID: $GROUP_ID
+      image: ijpatricio/genie
+      restart: unless-stopped
+      extra_hosts:
+        - 'host.docker.internal:host-gateway'
+      ports:
+        - '${APP_PORT:-8000}:8080'
+      volumes:
+        - .:/var/www/html
+      networks:
+          - web
+
+networks: { web: { driver: bridge } }

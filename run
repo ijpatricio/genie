@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+# Inspired on https://github.com/adriancooney/Taskfile
+#
+# Install an alias, to be able to simply execute `run`
+# echo 'alias run=./scripts/run' >> ~/.aliases
+#
+# Define Docker Compose command prefix...
+set -e
+
+function help {
+    echo "$0 <task> <args>"
+    echo "Tasks:"
+    compgen -A function | cat -n
+}
+
+function default {
+    help
+}
+
+function dc {
+    $DOCKER_CMD $*
+}
+
+function build:dev() {
+    USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose build
+}
+
+TIMEFORMAT="Task completed in %3lR"
+time "${@:-default}"
