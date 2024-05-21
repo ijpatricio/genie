@@ -1,5 +1,5 @@
 services:
-  webapp:
+  php:
     hostname: genie
     image: "ijpatricio/genie:${TAG:-latest}"
     restart: always
@@ -8,8 +8,15 @@ services:
       - ./storage/app:/var/www/html/storage/app
       - ./storage/logs:/var/www/html/storage/logs
     environment:
-      - PHP_OPCACHE_ENABLE=1
-      - AUTORUN_ENABLED=true
+      PHP_OPCACHE_ENABLE: 1
+      AUTORUN_ENABLED: true
+      PHP_FPM_POOL_NAME: genie_php
     networks: [ web ]
+
+  task:
+    image: "ijpatricio/genie:${TAG:-latest}"
+    command: [ "php", "/var/www/html/artisan", "schedule:work" ]
+    environment:
+      PHP_FPM_POOL_NAME: genie_task
 
 networks: { web: { driver: bridge } }
