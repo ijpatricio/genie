@@ -1,56 +1,15 @@
 services:
   webapp:
-    build:
-      context: .
-      dockerfile: docker/production-ssu/runtimes/webapp/Dockerfile
-      args:
-        USER_ID: 1000
-        GROUP_ID: 1000
-    container_name: ${IMAGE_NAME}
-    image: "${IMAGE_NAME}:${TAG:-latest}"
+    hostname: genie
+    image: "ijpatricio/genie:${TAG:-latest}"
     restart: always
-    ports: [ '${APP_PORT:-8000}:8080' ]
     volumes:
       - ./.env:/var/www/html/.env
-      - ./database/database.sqlite:/var/www/html/database/database.sqlite
       - ./storage/app:/var/www/html/storage/app
       - ./storage/logs:/var/www/html/storage/logs
     environment:
       - PHP_OPCACHE_ENABLE=1
       - AUTORUN_ENABLED=true
     networks: [ web ]
-    depends_on:
-      - pgsql
 
-  pgsql:
-    image: 'postgres:15'
-    ports:
-      - '${FORWARD_DB_PORT:-5432}:5432'
-    environment:
-      PGPASSWORD: '${DB_PASSWORD:-secret}'
-      POSTGRES_DB: '${DB_DATABASE}'
-      POSTGRES_USER: '${DB_USERNAME}'
-      POSTGRES_PASSWORD: '${DB_PASSWORD:-secret}'
-    volumes:
-      - 'pgsql:/var/lib/postgresql/data'
-    networks:
-      - web
-    healthcheck:
-      test:
-        - CMD
-        - pg_isready
-        - '-q'
-        - '-d'
-        - '${DB_DATABASE}'
-        - '-U'
-        - '${DB_USERNAME}'
-      retries: 3
-      timeout: 5s
-
-networks:
-  web:
-    external: true
-
-volumes:
-  pgsql:
-    driver: local
+networks: { web: { driver: bridge } }
