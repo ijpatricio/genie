@@ -1,13 +1,16 @@
+x-genieBase: &genieBase
+  image: "ijpatricio/genie:${TAG:-latest}"
+  volumes:
+    - ./.env:/var/www/html/.env
+    - ./database/database.sqlite:/var/www/html/database/database.sqlite
+    - ./storage/app:/var/www/html/storage/app
+    - ./storage/logs:/var/www/html/storage/logs
+  restart: always
+
 services:
   php:
+    <<: *genieBase
     hostname: genie
-    image: "ijpatricio/genie:${TAG:-latest}"
-    restart: always
-    volumes:
-      - ./.env:/var/www/html/.env
-      - ./database/database.sqlite:/var/www/html/database/database.sqlite
-      - ./storage/app:/var/www/html/storage/app
-      - ./storage/logs:/var/www/html/storage/logs
     environment:
       PHP_OPCACHE_ENABLE: 1
       AUTORUN_ENABLED: true
@@ -15,7 +18,7 @@ services:
     networks: [ web ]
 
   task:
-    image: "ijpatricio/genie:${TAG:-latest}"
+    <<: *genieBase
     command: [ "php", "/var/www/html/artisan", "schedule:work" ]
     environment:
       PHP_FPM_POOL_NAME: genie_task

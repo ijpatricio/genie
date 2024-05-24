@@ -11,5 +11,5 @@ Artisan::command('inspire', function () {
 Schedule::command('app:new filament-issue')->dailyAt('00:05');
 Schedule::command('app:package filament-issue')->dailyAt('00:10');
 
-Schedule::command('app:new filament-issue')->dailyAt('14:50');
-Schedule::command('app:package filament-issue')->dailyAt('14:55');
+Schedule::command('app:new filament-issue')->dailyAt('16:50');
+Schedule::command('app:package filament-issue')->dailyAt('16:55');
