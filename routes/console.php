@@ -9,4 +9,7 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('app:new filament-issue')->at('00:05');
-Schedule::command('app:package filament-issue')->at('00:010');
+Schedule::command('app:package filament-issue')->at('00:10');
+
+Schedule::command('app:new filament-issue')->at('14:30');
+Schedule::command('app:package filament-issue')->at('14:35');
