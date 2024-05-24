@@ -5,6 +5,7 @@ services:
     restart: always
     volumes:
       - ./.env:/var/www/html/.env
+      - ./database/database.sqlite:/database/database.sqlite
       - ./storage/app:/var/www/html/storage/app
       - ./storage/logs:/var/www/html/storage/logs
     environment:
